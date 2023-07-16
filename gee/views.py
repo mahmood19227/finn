@@ -79,20 +79,20 @@ def test1(request):
     # print(f"type(countries)={type(countries)}")
     # Map.addLayer(countries, {}, 'Countries')    
     ee_collection = ee.ImageCollection('COPERNICUS/S2_SR')
-    # table = geemap.shp_to_ee(countries_shp)
-    table = ee.FeatureCollection('projects/ee-farokhian/assets/ahwaz')
+    table = geemap.shp_to_ee('ahwaz.shp')
+    # table = ee.FeatureCollection('projects/ee-farokhian/assets/ahwaz')
     print(f"type(table)={type(table)}")
-    print(f"table.geometry().getInfo()={table.geometry().getInfo()}")
-
+    # print(f"table.geometry().getInfo()={table.geometry().getInfo()}")
+    # table.getB
     e1 = ee_collection.filterBounds(table)
     e2 = e1.filterDate('2023-02-01','2023-03-01')
     e3 = e2.filter(ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE',30))
     e4 = e3.map(mapfunction).max().clip(table).rename('may')
+    # print(f"e4.getBounds()={e4.getBounds()}")
     # print(f"e4.geometry.getInfo()={e4.geometry().getInfo()}")
     vis_params = {
                     'min': 0.0,
                     'max': 1.0
-                    # 'palette': ['black', 'blue', 'purple', 'cyan', 'green', 'yellow', 'red']
                 }
     # print(f"ee_collection={ee_collection}")
     
@@ -102,5 +102,7 @@ def test1(request):
         'url': url,
     }
     print(f"URL={url}")
-    return render(request,'test1.html',{'map_url':url})
+    bbox = table.geometry().bounds().coordinates().getInfo()[0]
+    bbox = [[i[1],i[0]] for i in bbox]
+    return render(request,'test1.html',{'map_url':url,'bbox':bbox})
     return JsonResponse(response_data)
