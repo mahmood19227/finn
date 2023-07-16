@@ -9,7 +9,10 @@ import jsonify
 import json
 from earthengine.products import EE_PRODUCTS
 from .forms import SatelliteDataForm
-from earthengine.methods import get_image_collection_asset
+from earthengine.methods import get_image_collection_asset,image_to_map_id
+from django.shortcuts import render
+import geemap
+
 
 
 def home_view(request):
@@ -67,3 +70,37 @@ def get_image_collection(request):
         #the_response_data = json.dumps(response_data)
         #print(the_response_data)
         return JsonResponse(response_data)
+
+def mapfunction(img):
+    return img.normalizedDifference(['B8','B4']);
+
+def test1(request):
+    # countries_shp = 'ahwaz.shp'
+    # print(f"type(countries)={type(countries)}")
+    # Map.addLayer(countries, {}, 'Countries')    
+    ee_collection = ee.ImageCollection('COPERNICUS/S2_SR')
+    # table = geemap.shp_to_ee(countries_shp)
+    table = ee.FeatureCollection('projects/ee-farokhian/assets/ahwaz')
+    print(f"type(table)={type(table)}")
+    print(f"table.geometry().getInfo()={table.geometry().getInfo()}")
+
+    e1 = ee_collection.filterBounds(table)
+    e2 = e1.filterDate('2023-02-01','2023-03-01')
+    e3 = e2.filter(ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE',30))
+    e4 = e3.map(mapfunction).max().clip(table).rename('may')
+    # print(f"e4.geometry.getInfo()={e4.geometry().getInfo()}")
+    vis_params = {
+                    'min': 0.0,
+                    'max': 1.0
+                    # 'palette': ['black', 'blue', 'purple', 'cyan', 'green', 'yellow', 'red']
+                }
+    # print(f"ee_collection={ee_collection}")
+    
+    url = image_to_map_id(e4, vis_params)
+    response_data = {
+        'success': True,
+        'url': url,
+    }
+    print(f"URL={url}")
+    return render(request,'test1.html',{'map_url':url})
+    return JsonResponse(response_data)

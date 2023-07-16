@@ -27,7 +27,7 @@ else:
         )
         ee.Initialize(credentials)
 
-def image_to_map_id(image_name, vis_params={}):
+def     image_to_map_id(image_name, vis_params={}):
     """
     Get map_id parameters
     """

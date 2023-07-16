@@ -97,6 +97,11 @@ EE_PRODUCTS = {
                 'start_date': '2019-02-08',
                 'end_date': str(dt.datetime.today().strftime("%Y-%m-%d"))  # to present
             },
+            'h2o': {
+                'display':'Water',
+                'collection': 'COPERNICUS/S2_SR',
+                
+            }
         }
     },
     'landsat': {

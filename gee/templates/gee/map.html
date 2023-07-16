@@ -2,8 +2,8 @@
 <html>
 
 <head>
-	{% load jsonify static %}
-	<!-- Custom CSS-->
+	{% load  static %}  
+	<!-- Custom CSS jsonify-->
 	<link rel="stylesheet" type="text/css" href="{% static 'gee/css/bootstrap.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'gee/css/nav.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'gee/css/nav.css' %}" />
@@ -110,8 +110,8 @@
 					// handle a successful response
 					success: function data_loaded(json) {
 
-						console.log(json); // log the returned json to the console
-						console.log("success"); // another sanity check
+						console.log(json);
+						console.log("success");
 						var gee_layer = new L.tileLayer(json.url, { attribution: '&copy; <a href="https://www.earthengine.google.com/copyright">Google Earth Engine</a>'})
 						function get_gee_layer(){
 							gee_layer.addTo(map);
