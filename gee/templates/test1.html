@@ -34,66 +34,14 @@
 </head>
 
 <body style="width:100%; height: fit-content">
-	<nav>
-		<div class="logo">
-			<img src="{% static 'gee/img/world_map.png' %}" width="130px" height="65px">
-			<div class="logo-words">
-				<h4>GoalSpatial</h4>
-				<h6>Coordinates for Problems</h6>
-			</div>
-		</div>
-		<ul class="nav-links">
-			<li>
-				<a href="#">Home</a>
-			</li>
-			<li>
-				<a href="#">Map</a>
-			</li>
-			<li>
-				<a href="#">Login</a>
-			</li>
-			<li>
-				<a href="#">SignUp</a>
-			</li>
-		</ul>
-		<div class="burger">
-			<div class="line1"></div>
-			<div class="line2"></div>
-			<div class="line3"></div>
-		</div>
-	</nav>
-	<div class="row">
-		<div class="form-div">
-			<a href="{{map_url}}">{{map_url}}</a>
-			<h3 class="form-title">Select Dataset</h3>
-			<form method="post" action="{% url 'get-image-collection' %}" id="form-prds">
-				{% csrf_token %}
-				{{ satellite_data_form }}
-				<br />
-				<label for="id_start_date">Start date:</label>
-				<input type="date" name="start_date" required id="id_start_date" min="2000-02-24"
-					max="{{ latest_date }}">
-				<br />
-				<label for="id_end_date">End date:</label>
-				<input type="date" name="end_date" required id="id_end_date" min="2000-02-24" max="{{ latest_date }}">
-				<br />
-				<input type="submit" name="submit" class="btn btn-primary" id="load_map" value="Load Selected Products"
-					class="datepicker">
-			</form>
-			<button id="clear_map" class="btn">Clear Current Products</button>
-		</div>
 		<div class="map-div" id="map-div">
 		</div>
-	</div>
-	<div id="ee-products" data-ee-products="{{ ee_products }}">
-
-	</div>
-	<div id="overlay"></div>
 	<script type="text/javascript">
 		$(document).ready(function data_loaded() {
 			console.log("success"); // another sanity check
 			var gee_layer = new L.tileLayer('{{map_url}}', { attribution: '&copy; <a href="https://www.earthengine.google.com/copyright">Google Earth Engine</a>'});
 			get_gee_layer();
+			map.fitBounds({{bbox}})
 			function get_gee_layer(){
 				gee_layer.addTo(map);
 				var baseMaps = {

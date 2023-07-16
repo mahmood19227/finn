@@ -10,8 +10,8 @@ div .row{
 }
 .map-div{
 	float: right;
-	width: 75%;
-	height: 90vh;
+	/* width: 75%;
+	height: 90vh; */
 }
 #clear_map{
 	margin-right: auto;
